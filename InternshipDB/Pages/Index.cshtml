@@ -1,0 +1,134 @@
+﻿@page
+@model InternshipDB.Pages.IndexModel
+
+@{
+    ViewData["Title"] = "Company Directory";
+}
+
+<section class="page-hero mb-4">
+    <div>
+        <h1>Internship Companies Database</h1>
+    </div>
+</section>
+
+<form method="get" class="search-panel mb-4">
+    <div class="search-grid">
+        <div>
+            <label asp-for="SearchString" class="form-label fw-semibold">Search</label>
+            <input asp-for="SearchString" class="form-control form-control-lg search-input-compact"
+                   placeholder="Search by company, sector or person..." />
+        </div>
+        <div>
+            <label asp-for="SelectedSector" class="form-label fw-semibold">Sector</label>
+            <select asp-for="SelectedSector" class="form-select form-select-lg">
+                <option value="">All sectors</option>
+                @foreach (var sector in Model.Sectors)
+                {
+                    <option value="@sector">@sector</option>
+                }
+            </select>
+        </div>
+        <div>
+            <label asp-for="SortOrder" class="form-label fw-semibold">Sort</label>
+            <select asp-for="SortOrder" class="form-select form-select-lg">
+                <option value="az">A-Z</option>
+                <option value="za">Z-A</option>
+            </select>
+        </div>
+        <div class="search-tools-grid">
+            <div class="dropdown toolbar-dropdown">
+                <button class="btn btn-clear-action btn-toolbar dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Print
+                </button>
+                <ul class="dropdown-menu toolbar-menu">
+                    <li><button type="button" class="dropdown-item" onclick="companyTools.saveAsPdf()">PDF</button></li>
+                    <li><button type="button" class="dropdown-item" onclick="companyTools.exportWord()">Word</button></li>
+                    <li><button type="button" class="dropdown-item" onclick="companyTools.printPage()">Print</button></li>
+                </ul>
+            </div>
+            <a asp-page="Create" class="btn btn-add-company btn-toolbar">
+                Add Company
+            </a>
+            <a asp-page="/Index" class="btn btn-clear-action btn-toolbar">Clear</a>
+            <button type="submit" class="btn btn-search-action btn-toolbar">Search</button>
+        </div>
+    </div>
+</form>
+
+<table class="table company-table align-middle">
+    <thead>
+        <tr>
+            <th>Company Name</th>
+            <th>Sector</th>
+            <th>Person in Charge</th>
+            <th>Email Address</th>
+            <th>Contact Number</th>
+            <th>Website</th>
+            <th>Internship Period</th>
+            <th class="text-center">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Company.Any())
+        {
+            @foreach (var item in Model.Company)
+            {
+                var internshipPeriodText = Model.GetInternshipPeriodText(item.InternshipPeriod);
+                <tr>
+                    <td data-label="Company Name">
+                        <div class="company-name" title="@item.CompanyName">@item.CompanyName</div>
+                    </td>
+                    <td data-label="Sector">
+                        <span class="sector-pill one-line" title="@item.Sector">@item.Sector</span>
+                    </td>
+                    <td data-label="Person in Charge">
+                        <div class="company-meta" title="@item.PersonInCharge">@(string.IsNullOrWhiteSpace(item.PersonInCharge) ? "-" : item.PersonInCharge)</div>
+                    </td>
+                    <td data-label="Email Address">
+                        @if (!string.IsNullOrWhiteSpace(item.Email))
+                        {
+                            <a class="contact-link" href="mailto:@item.Email" title="@item.Email">@item.Email</a>
+                        }
+                        else
+                        {
+                            <span class="company-meta">-</span>
+                        }
+                    </td>
+                    <td data-label="Contact Number">
+                        <div class="company-meta" title="@item.ContactNumber">@(string.IsNullOrWhiteSpace(item.ContactNumber) ? "-" : item.ContactNumber)</div>
+                    </td>
+                    <td data-label="Website">
+                        @if (!string.IsNullOrWhiteSpace(item.Website))
+                        {
+                            <a class="contact-link" href="@(item.Website.StartsWith("http", StringComparison.OrdinalIgnoreCase) ? item.Website : $"https://{item.Website}")" target="_blank" rel="noopener noreferrer" title="@item.Website">@item.Website</a>
+                        }
+                        else
+                        {
+                            <span class="company-meta">-</span>
+                        }
+                    </td>
+                    <td data-label="Internship Period" class="internship-cell">
+                        <div class="details-text" title="@internshipPeriodText">@internshipPeriodText</div>
+                    </td>
+                    <td data-label="Actions" class="text-center actions-cell">
+                        <div class="action-buttons action-buttons-vertical">
+                            <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-action btn-edit">Edit</a>
+                            <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-action btn-details">Details</a>
+                            <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-action btn-delete">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="8" class="empty-state">No companies found for the current search.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="table-summary">
+    <span>Total in database: <strong>@Model.TotalCompanies</strong></span>
+</div>

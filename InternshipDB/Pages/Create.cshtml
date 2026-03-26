@@ -1,0 +1,66 @@
+﻿@page
+@model InternshipDB.Pages.CreateModel
+
+@{
+    ViewData["Title"] = "Add Company";
+}
+
+<section class="editor-header">
+    <div>
+        <h1>Add Company</h1>
+        <p class="editor-subtitle">Create a new company record.</p>
+    </div>
+</section>
+
+<div class="editor-card">
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="editor-grid editor-grid-single">
+            <div class="form-group">
+                <label asp-for="Company.CompanyName" class="form-label"></label>
+                <input asp-for="Company.CompanyName" class="form-control" />
+                <span asp-validation-for="Company.CompanyName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Company.Sector" class="form-label"></label>
+                <input asp-for="Company.Sector" class="form-control" />
+                <span asp-validation-for="Company.Sector" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Company.PersonInCharge" class="form-label"></label>
+                <input asp-for="Company.PersonInCharge" class="form-control" />
+                <span asp-validation-for="Company.PersonInCharge" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Company.Email" class="form-label"></label>
+                <input asp-for="Company.Email" class="form-control" />
+                <span asp-validation-for="Company.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Company.ContactNumber" class="form-label"></label>
+                <input asp-for="Company.ContactNumber" class="form-control" />
+                <span asp-validation-for="Company.ContactNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Company.Website" class="form-label"></label>
+                <input asp-for="Company.Website" class="form-control" />
+                <span asp-validation-for="Company.Website" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Company.InternshipPeriod" class="form-label"></label>
+                <input asp-for="Company.InternshipPeriod" class="form-control" />
+                <span asp-validation-for="Company.InternshipPeriod" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-actions mt-4">
+            <a asp-page="./Index" class="btn btn-clear-action btn-form-secondary">Back to List</a>
+            <button type="submit" class="btn btn-search-action btn-form-primary">Create</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

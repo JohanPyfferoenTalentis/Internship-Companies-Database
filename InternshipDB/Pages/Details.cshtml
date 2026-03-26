@@ -1,0 +1,55 @@
+﻿@page
+@model InternshipDB.Pages.DetailsModel
+
+@{
+    ViewData["Title"] = "Company Details";
+}
+
+<section class="editor-header">
+    <div>
+        <h1>Company Details</h1>
+        <p class="editor-subtitle">Overview of the selected company.</p>
+    </div>
+</section>
+
+<div class="editor-card">
+    <div class="editor-grid editor-grid-single">
+        <div class="form-group">
+            <label class="form-label">Company Name</label>
+            <input class="form-control readonly-field" value="@Model.Company.CompanyName" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Sector</label>
+            <input class="form-control readonly-field" value="@Model.Company.Sector" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Person in Charge</label>
+            <input class="form-control readonly-field" value="@Model.Company.PersonInCharge" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input class="form-control readonly-field" value="@Model.Company.Email" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Contact Number</label>
+            <input class="form-control readonly-field" value="@Model.Company.ContactNumber" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Website</label>
+            <input class="form-control readonly-field" value="@Model.Company.Website" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Internship Period</label>
+            <input class="form-control readonly-field" value="@Model.Company.InternshipPeriod" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Information</label>
+            <textarea class="form-control form-textarea readonly-field" rows="5" readonly>@Model.Company.Information</textarea>
+        </div>
+    </div>
+
+    <div class="form-actions mt-4">
+        <a asp-page="./Index" class="btn btn-clear-action btn-form-secondary">Back to List</a>
+        <a asp-page="./Edit" asp-route-id="@Model.Company.Id" class="btn btn-search-action btn-form-primary">Edit Company</a>
+    </div>
+</div>

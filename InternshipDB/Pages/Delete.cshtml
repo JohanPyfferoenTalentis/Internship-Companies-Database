@@ -1,0 +1,58 @@
+﻿@page
+@model InternshipDB.Pages.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete Company";
+}
+
+<section class="editor-header">
+    <div>
+        <h1>Delete Company</h1>
+        <p class="editor-subtitle delete-subtitle">Are you sure you want to delete this company?</p>
+    </div>
+</section>
+
+<div class="editor-card details-card-delete">
+    <div class="editor-grid editor-grid-single">
+        <div class="form-group">
+            <label class="form-label">Company Name</label>
+            <input class="form-control readonly-field" value="@Model.Company.CompanyName" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Sector</label>
+            <input class="form-control readonly-field" value="@Model.Company.Sector" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Person in Charge</label>
+            <input class="form-control readonly-field" value="@Model.Company.PersonInCharge" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input class="form-control readonly-field" value="@Model.Company.Email" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Contact Number</label>
+            <input class="form-control readonly-field" value="@Model.Company.ContactNumber" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Website</label>
+            <input class="form-control readonly-field" value="@Model.Company.Website" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Internship Period</label>
+            <input class="form-control readonly-field" value="@Model.Company.InternshipPeriod" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Information</label>
+            <textarea class="form-control form-textarea readonly-field" rows="5" readonly>@Model.Company.Information</textarea>
+        </div>
+    </div>
+
+    <form method="post" class="mt-4">
+        <input type="hidden" asp-for="Company.Id" />
+        <div class="form-actions">
+            <a asp-page="./Index" class="btn btn-clear-action btn-form-secondary">Back to List</a>
+            <button type="submit" class="btn btn-delete btn-form-primary">Delete</button>
+        </div>
+    </form>
+</div>
