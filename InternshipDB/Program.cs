@@ -11,6 +11,12 @@ builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.ExecuteSqlRaw("UPDATE Companies SET CompanyName = 'Unknown' WHERE CompanyName IS NULL");
+}
+
 // Seed de data bij het opstarten
 CompanySeed.Initialize(app);
 

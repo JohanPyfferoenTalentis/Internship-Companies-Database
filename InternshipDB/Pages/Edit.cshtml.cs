@@ -48,6 +48,20 @@ namespace InternshipDB.Pages
                 return Page();
             }
 
+            // Normalize trimmed fields to avoid accidental leading/trailing spaces
+            Company.CompanyName = Company.CompanyName?.Trim();
+            Company.CompanyRegistrationNumber = Company.CompanyRegistrationNumber?.Trim();
+            Company.Sector = Company.Sector?.Trim();
+            Company.PersonInCharge = Company.PersonInCharge?.Trim();
+            Company.Email = Company.Email?.Trim();
+            Company.ContactNumber = Company.ContactNumber?.Trim();
+            Company.Website = Company.Website?.Trim();
+            Company.InternshipPeriod = Company.InternshipPeriod?.Trim();
+            Company.Information = Company.Information?.Trim();
+            Company.Quality = Company.Quality?.Trim();
+            Company.Address = Company.Address?.Trim();
+            Company.DressCode = Company.DressCode?.Trim();
+
             _context.Attach(Company).State = EntityState.Modified;
 
             try

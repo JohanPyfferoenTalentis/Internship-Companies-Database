@@ -23,6 +23,21 @@
                 <span asp-validation-for="Company.CompanyName" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Company.CompanyRegistrationNumber" class="form-label"></label>
+                <input asp-for="Company.CompanyRegistrationNumber" class="form-control" />
+                <span asp-validation-for="Company.CompanyRegistrationNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Company.Address" class="form-label"></label>
+                <textarea asp-for="Company.Address" class="form-control" rows="2"></textarea>
+                <span asp-validation-for="Company.Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Company.DressCode" class="form-label"></label>
+                <input asp-for="Company.DressCode" class="form-control" />
+                <span asp-validation-for="Company.DressCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Company.Sector" class="form-label"></label>
                 <input asp-for="Company.Sector" class="form-control" />
                 <span asp-validation-for="Company.Sector" class="text-danger"></span>
@@ -51,6 +66,11 @@
                 <label asp-for="Company.InternshipPeriod" class="form-label"></label>
                 <input asp-for="Company.InternshipPeriod" class="form-control" />
                 <span asp-validation-for="Company.InternshipPeriod" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Company.Quality" class="form-label"></label>
+                <textarea asp-for="Company.Quality" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Company.Quality" class="text-danger"></span>
             </div>
         </div>
 

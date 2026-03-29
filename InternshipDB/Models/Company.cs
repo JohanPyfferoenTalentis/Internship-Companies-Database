@@ -10,6 +10,15 @@ namespace InternshipDB.Models
         [Display(Name = "Company Name")]
         public string? CompanyName { get; set; }
 
+        [Display(Name = "Company Registration Number")]
+        public string? CompanyRegistrationNumber { get; set; }
+
+        [Display(Name = "Address")]
+        public string? Address { get; set; }
+
+        [Display(Name = "Dress-code")]
+        public string? DressCode { get; set; }
+
         [Display(Name = "Sector")]
         public string? Sector { get; set; }
 
@@ -30,5 +39,8 @@ namespace InternshipDB.Models
 
         [Display(Name = "Information")]
         public string? Information { get; set; }
+
+        [Display(Name = "Quality")]
+        public string? Quality { get; set; }
     }
 }

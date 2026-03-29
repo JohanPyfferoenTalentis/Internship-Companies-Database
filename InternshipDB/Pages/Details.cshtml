@@ -15,8 +15,16 @@
 <div class="editor-card">
     <div class="editor-grid editor-grid-single">
         <div class="form-group">
+            <label class="form-label">ID</label>
+            <input class="form-control readonly-field" value="@Model.Company.Id" readonly />
+        </div>
+        <div class="form-group">
             <label class="form-label">Company Name</label>
             <input class="form-control readonly-field" value="@Model.Company.CompanyName" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Company Registration Number</label>
+            <input class="form-control readonly-field one-line-field" value="@Model.Company.CompanyRegistrationNumber" readonly />
         </div>
         <div class="form-group">
             <label class="form-label">Sector</label>
@@ -27,12 +35,16 @@
             <input class="form-control readonly-field" value="@Model.Company.PersonInCharge" readonly />
         </div>
         <div class="form-group">
-            <label class="form-label">Email Address</label>
-            <input class="form-control readonly-field" value="@Model.Company.Email" readonly />
+            <label class="form-label">Address</label>
+            <textarea class="form-control form-textarea readonly-field" rows="3" readonly>@Model.Company.Address</textarea>
         </div>
         <div class="form-group">
             <label class="form-label">Contact Number</label>
             <input class="form-control readonly-field" value="@Model.Company.ContactNumber" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input class="form-control readonly-field" value="@Model.Company.Email" readonly />
         </div>
         <div class="form-group">
             <label class="form-label">Website</label>
@@ -43,13 +55,34 @@
             <input class="form-control readonly-field" value="@Model.Company.InternshipPeriod" readonly />
         </div>
         <div class="form-group">
+            <label class="form-label">Dress-code</label>
+            <input class="form-control readonly-field" value="@Model.Company.DressCode" readonly />
+        </div>
+        <div class="form-group">
             <label class="form-label">Information</label>
             <textarea class="form-control form-textarea readonly-field" rows="5" readonly>@Model.Company.Information</textarea>
         </div>
+        <div class="form-group">
+            <label class="form-label">Quality</label>
+            <textarea class="form-control form-textarea readonly-field" rows="4" readonly>@Model.Company.Quality</textarea>
+        </div>
     </div>
 
-    <div class="form-actions mt-4">
-        <a asp-page="./Index" class="btn btn-clear-action btn-form-secondary">Back to List</a>
-        <a asp-page="./Edit" asp-route-id="@Model.Company.Id" class="btn btn-search-action btn-form-primary">Edit Company</a>
+    <div class="form-actions mt-4 d-flex align-items-center">
+        <div>
+            <a asp-page="./Index" class="btn btn-clear-action btn-form-secondary">Back to List</a>
+            <a asp-page="./Edit" asp-route-id="@Model.Company.Id" class="btn btn-search-action btn-form-primary ms-2">Edit</a>
+            <div class="dropdown toolbar-dropdown d-inline-block ms-2">
+                <button class="btn btn-search-action btn-form-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Print / Export
+                </button>
+                <ul class="dropdown-menu toolbar-menu">
+                    <li><button type="button" class="dropdown-item" onclick="companyTools.saveAsPdf()">PDF</button></li>
+                    <li><button type="button" class="dropdown-item" onclick="companyTools.exportWord()">Word</button></li>
+                    <li><button type="button" class="dropdown-item" onclick="companyTools.printPage()">Print</button></li>
+                </ul>
+            </div>
+            <a asp-page="./Delete" asp-route-id="@Model.Company.Id" class="btn btn-delete btn-form-danger ms-2">Delete</a>
+        </div>
     </div>
 </div>

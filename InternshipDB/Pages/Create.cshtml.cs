@@ -34,11 +34,26 @@ namespace InternshipDB.Pages
             {
                 return Page();
             }
+            // Normalize/trim input so sorting and distinct operations behave consistently
+            Company.CompanyName = Company.CompanyName?.Trim();
+            Company.CompanyRegistrationNumber = Company.CompanyRegistrationNumber?.Trim();
+            Company.Sector = Company.Sector?.Trim();
+            Company.Address = Company.Address?.Trim();
+            Company.DressCode = Company.DressCode?.Trim();
+            Company.PersonInCharge = Company.PersonInCharge?.Trim();
+            Company.Email = Company.Email?.Trim();
+            Company.ContactNumber = Company.ContactNumber?.Trim();
+            Company.Website = Company.Website?.Trim();
+            Company.InternshipPeriod = Company.InternshipPeriod?.Trim();
+            Company.Information = Company.Information?.Trim();
+            Company.Quality = Company.Quality?.Trim();
 
             _context.Companies.Add(Company);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+            // Ensure we return to the index with alphabetical sort so the newly added
+            // company appears in the correct position.
+            return RedirectToPage("./Index", new { SortOrder = "az" });
         }
     }
 }

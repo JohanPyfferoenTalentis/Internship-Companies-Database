@@ -42,7 +42,8 @@ namespace InternshipDB.Pages
                 .Where(c => !string.IsNullOrWhiteSpace(c.Sector))
                 .Select(c => c.Sector!)
                 .Distinct()
-                .OrderBy(s => s)
+                // Order case-insensitively for consistent alphabetical ordering
+                .OrderBy(s => s.ToLower())
                 .ToListAsync();
 
             TotalCompanies = await _context.Companies.CountAsync();
@@ -62,8 +63,8 @@ namespace InternshipDB.Pages
             }
 
             companies = SortOrder == "za"
-                ? companies.OrderByDescending(c => c.CompanyName)
-                : companies.OrderBy(c => c.CompanyName);
+                ? companies.OrderByDescending(c => (c.CompanyName ?? string.Empty).ToLower())
+                : companies.OrderBy(c => (c.CompanyName ?? string.Empty).ToLower());
 
             Company = await companies.ToListAsync();
             FilteredCompanies = Company.Count;

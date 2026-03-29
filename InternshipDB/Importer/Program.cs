@@ -1,0 +1,1 @@
+using System; using System.Linq; using ClosedXML.Excel; class Program { static void Main() { var wb = new XLWorkbook(@"companies/tblCompanies.xlsx"); var ws = wb.Worksheets.First(); var row = ws.Row(1); foreach (var cell in row.CellsUsed()) { Console.WriteLine(cell.Value.ToString()); } } }

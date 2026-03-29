@@ -1,0 +1,32 @@
+@page
+@model InternshipDB.Pages.ImportModel
+
+@{
+    ViewData["Title"] = "Import Companies";
+}
+
+<section class="editor-header">
+    <div>
+        <h1>Import Companies</h1>
+        <p class="editor-subtitle">Paste the text export (from Paragon or CSV) into the box below and click Import.</p>
+    </div>
+</section>
+
+<div class="editor-card">
+    <form method="post">
+        <div class="form-group">
+            <label class="form-label">Paste data</label>
+            <textarea asp-for="RawText" class="form-control" rows="12"></textarea>
+        </div>
+
+        <div class="form-actions mt-3">
+            <button type="submit" class="btn btn-search-action btn-form-primary">Import</button>
+            <a asp-page="/Index" class="btn btn-clear-action btn-form-secondary ms-2">Back</a>
+        </div>
+
+        @if (!string.IsNullOrWhiteSpace(Model.ResultMessage))
+        {
+            <div class="mt-3 alert alert-info">@Model.ResultMessage</div>
+        }
+    </form>
+</div>

@@ -35,22 +35,14 @@
                 <option value="za">Z-A</option>
             </select>
         </div>
-        <div class="search-tools-grid">
-            <div class="dropdown toolbar-dropdown">
-                <button class="btn btn-clear-action btn-toolbar dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Print
-                </button>
-                <ul class="dropdown-menu toolbar-menu">
-                    <li><button type="button" class="dropdown-item" onclick="companyTools.saveAsPdf()">PDF</button></li>
-                    <li><button type="button" class="dropdown-item" onclick="companyTools.exportWord()">Word</button></li>
-                    <li><button type="button" class="dropdown-item" onclick="companyTools.printPage()">Print</button></li>
-                </ul>
+        <div class="search-tools">
+            <div class="search-actions-vertical">
+                <a asp-page="Create" class="btn btn-add-company btn-toolbar">Add Company</a>
+                <div class="search-actions mt-2">
+                    <a asp-page="/Index" class="btn btn-clear-action btn-toolbar">Clear</a>
+                    <button type="submit" class="btn btn-search-action btn-toolbar ms-2">Search</button>
+                </div>
             </div>
-            <a asp-page="Create" class="btn btn-add-company btn-toolbar">
-                Add Company
-            </a>
-            <a asp-page="/Index" class="btn btn-clear-action btn-toolbar">Clear</a>
-            <button type="submit" class="btn btn-search-action btn-toolbar">Search</button>
         </div>
     </div>
 </form>
@@ -58,14 +50,13 @@
 <table class="table company-table align-middle">
     <thead>
         <tr>
+            <th>ID</th>
             <th>Company Name</th>
+            <th class="one-line-field">Company Registration Number</th>
             <th>Sector</th>
             <th>Person in Charge</th>
             <th>Email Address</th>
             <th>Contact Number</th>
-            <th>Website</th>
-            <th>Internship Period</th>
-            <th class="text-center">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -73,10 +64,15 @@
         {
             @foreach (var item in Model.Company)
             {
-                var internshipPeriodText = Model.GetInternshipPeriodText(item.InternshipPeriod);
-                <tr>
+                <tr class="company-row" data-id="@item.Id" style="cursor:pointer;" onclick="location.href='@Url.Page("./Details", new { id = item.Id })'">
+                    <td data-label="ID" class="id-cell">
+                        @item.Id
+                    </td>
                     <td data-label="Company Name">
                         <div class="company-name" title="@item.CompanyName">@item.CompanyName</div>
+                    </td>
+                    <td data-label="Company Registration Number">
+                        <div class="company-meta one-line-field">@(string.IsNullOrWhiteSpace(item.CompanyRegistrationNumber) ? "-" : item.CompanyRegistrationNumber)</div>
                     </td>
                     <td data-label="Sector">
                         <span class="sector-pill one-line" title="@item.Sector">@item.Sector</span>
@@ -97,33 +93,13 @@
                     <td data-label="Contact Number">
                         <div class="company-meta" title="@item.ContactNumber">@(string.IsNullOrWhiteSpace(item.ContactNumber) ? "-" : item.ContactNumber)</div>
                     </td>
-                    <td data-label="Website">
-                        @if (!string.IsNullOrWhiteSpace(item.Website))
-                        {
-                            <a class="contact-link" href="@(item.Website.StartsWith("http", StringComparison.OrdinalIgnoreCase) ? item.Website : $"https://{item.Website}")" target="_blank" rel="noopener noreferrer" title="@item.Website">@item.Website</a>
-                        }
-                        else
-                        {
-                            <span class="company-meta">-</span>
-                        }
-                    </td>
-                    <td data-label="Internship Period" class="internship-cell">
-                        <div class="details-text" title="@internshipPeriodText">@internshipPeriodText</div>
-                    </td>
-                    <td data-label="Actions" class="text-center actions-cell">
-                        <div class="action-buttons action-buttons-vertical">
-                            <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-action btn-edit">Edit</a>
-                            <a asp-page="./Details" asp-route-id="@item.Id" class="btn btn-action btn-details">Details</a>
-                            <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-action btn-delete">Delete</a>
-                        </div>
-                    </td>
                 </tr>
             }
         }
         else
         {
             <tr>
-                <td colspan="8" class="empty-state">No companies found for the current search.</td>
+                <td colspan="7" class="empty-state">No companies found for the current search.</td>
             </tr>
         }
     </tbody>
@@ -132,3 +108,37 @@
 <div class="table-summary">
     <span>Total in database: <strong>@Model.TotalCompanies</strong></span>
 </div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const rows = document.querySelectorAll('.company-row');
+
+            function hideAllActionRows() {
+                document.querySelectorAll('.company-actions-row').forEach(r => r.style.display = 'none');
+            }
+
+            rows.forEach(r => {
+                r.addEventListener('click', function (e) {
+                    // ignore clicks on links inside the row (email links etc.)
+                    if (e.target.closest('a')) return;
+
+                    const actionsRow = r.nextElementSibling;
+                    if (!actionsRow || !actionsRow.classList.contains('company-actions-row')) return;
+
+                    // toggle this one, hide others
+                    const isVisible = actionsRow.style.display !== 'none';
+                    hideAllActionRows();
+                    actionsRow.style.display = isVisible ? 'none' : 'table-row';
+                });
+            });
+
+            // click outside to close
+            document.addEventListener('click', function (e) {
+                if (!e.target.closest('.company-row') && !e.target.closest('.company-actions-row')) {
+                    hideAllActionRows();
+                }
+            });
+        })();
+    </script>
+}

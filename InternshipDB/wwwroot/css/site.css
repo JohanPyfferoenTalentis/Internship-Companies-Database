@@ -190,11 +190,39 @@ h1 {
   color: var(--brand-dark);
 }
 
+/* Layout so Add Company matches the combined width of Clear + Search buttons */
+.search-tools {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* keep Add Company above and aligned to the right */
+  gap: 0.5rem;
+}
+
+/* vertical wrapper so Add Company sits above the small actions and will match their combined width */
+.search-actions-vertical {
+  display: inline-block;
+}
+
+.search-actions {
+  display: flex;
+  gap: 0.5rem; /* spacing between Clear and Search */
+}
+
+.search-actions .btn-clear-action,
+.search-actions .btn-search-action {
+  min-width: 7.5rem;
+}
+
+.search-actions-vertical .btn-add-company {
+  display: block;
+  width: 100%; /* will match the width of the underlying .search-actions (Clear + Search) */
+}
+
 .company-table {
   width: 100%;
   table-layout: fixed;
   border-collapse: separate;
-  border-spacing: 0 0.45rem;
+  border-spacing: 0 0.25rem; /* less vertical gap between rows */
   margin-bottom: 0;
 }
 
@@ -208,19 +236,18 @@ h1 {
   padding: 0.45rem 0.45rem;
 }
 
-.company-table thead th:nth-child(1) { width: 18%; }
-.company-table thead th:nth-child(2) { width: 9%; }
-.company-table thead th:nth-child(3) { width: 12%; }
-.company-table thead th:nth-child(4) { width: 15%; }
-.company-table thead th:nth-child(5) { width: 10%; }
-.company-table thead th:nth-child(6) { width: 11%; }
-.company-table thead th:nth-child(7) { width: 15%; }
-.company-table thead th:nth-child(8) { width: 10%; }
+.company-table thead th:nth-child(1) { width: 3%; }
+.company-table thead th:nth-child(2) { width: 32%; }
+.company-table thead th:nth-child(3) { width: 18%; }
+.company-table thead th:nth-child(4) { width: 10%; }
+.company-table thead th:nth-child(5) { width: 12%; }
+.company-table thead th:nth-child(6) { width: 15%; }
+.company-table thead th:nth-child(7) { width: 10%; }
 
 .company-table tbody tr {
   background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
-  box-shadow: 0 8px 18px rgba(16, 37, 66, 0.05);
-  border-left: 4px solid #d9e8ff;
+  box-shadow: 0 6px 12px rgba(16, 37, 66, 0.04); /* lighter, less vertical visual weight */
+  border-left: 3px solid #d9e8ff;
 }
 
 .company-table tbody tr:nth-child(even) {
@@ -228,15 +255,18 @@ h1 {
 }
 
 .company-table tbody tr:hover {
-  box-shadow: 0 10px 22px rgba(16, 37, 66, 0.08);
+  box-shadow: 0 8px 16px rgba(16, 37, 66, 0.06);
   background: linear-gradient(135deg, #ffffff 0%, #eef5ff 100%);
 }
 
 .company-table tbody td {
   border: 0;
-  padding: 0.6rem 0.45rem;
+  padding: 0.28rem 0.4rem; /* even more compact */
   vertical-align: middle;
-  font-size: 0.8rem;
+  font-size: 0.84rem;
+  /* allow wrapping for most cells so long values (contact/email) remain visible */
+  white-space: normal;
+  overflow: visible;
 }
 
 .company-table tbody td:first-child {
@@ -254,9 +284,34 @@ h1 {
   font-weight: 800;
   color: var(--brand-dark);
   margin-bottom: 0;
-  white-space: normal;
-  word-break: break-word;
-  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+/* Keep certain fields on a single line with ellipsis when too long */
+.one-line-field {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Smaller ID column appearance */
+.id-cell {
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--text-soft);
+  padding-left: 0.35rem;
+  padding-right: 0.35rem;
+}
+
+/* Prevent header labels from wrapping */
+.company-table thead th {
+  white-space: nowrap;
+  padding: 0.35rem 0.45rem; /* smaller header padding */
+  font-size: 0.78rem; /* slightly smaller header text */
+  color: var(--text-soft);
 }
 
 .company-meta,
