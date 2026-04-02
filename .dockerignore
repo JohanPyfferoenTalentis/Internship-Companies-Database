@@ -1,0 +1,17 @@
+**/.dockerignore
+**/.git
+**/.gitignore
+**/.vs
+**/.vscode
+**/bin
+**/obj
+**/out
+**/node_modules
+**/*.user
+**/*.dbmdl
+**/*.jfm
+**/secrets.dev.yaml
+**/values.dev.yaml
+LICENSE
+README.md
+DbCheck/
