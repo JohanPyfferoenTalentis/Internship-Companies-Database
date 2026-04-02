@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using InternshipDB.Data;
+using InternshipDB.Interfaces;
 using InternshipDB.Models;
 
 namespace InternshipDB.Pages
 {
     public class CreateModel : PageModel
     {
-        private readonly InternshipDB.Data.AppDbContext _context;
+        private readonly ICompanyRepository _repository;
 
-        public CreateModel(InternshipDB.Data.AppDbContext context)
+        public CreateModel(ICompanyRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         public IActionResult OnGet()
@@ -27,33 +22,32 @@ namespace InternshipDB.Pages
         [BindProperty]
         public Company Company { get; set; } = default!;
 
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
-            {
                 return Page();
-            }
-            // Normalize/trim input so sorting and distinct operations behave consistently
-            Company.CompanyName = Company.CompanyName?.Trim();
-            Company.CompanyRegistrationNumber = Company.CompanyRegistrationNumber?.Trim();
-            Company.Sector = Company.Sector?.Trim();
-            Company.Address = Company.Address?.Trim();
-            Company.DressCode = Company.DressCode?.Trim();
-            Company.PersonInCharge = Company.PersonInCharge?.Trim();
-            Company.Email = Company.Email?.Trim();
-            Company.ContactNumber = Company.ContactNumber?.Trim();
-            Company.Website = Company.Website?.Trim();
-            Company.InternshipPeriod = Company.InternshipPeriod?.Trim();
-            Company.Information = Company.Information?.Trim();
-            Company.Quality = Company.Quality?.Trim();
 
-            _context.Companies.Add(Company);
-            await _context.SaveChangesAsync();
+            TrimCompanyFields(Company);
 
-            // Ensure we return to the index with alphabetical sort so the newly added
-            // company appears in the correct position.
+            await _repository.AddAsync(Company);
+
             return RedirectToPage("./Index", new { SortOrder = "az" });
+        }
+
+        private static void TrimCompanyFields(Company c)
+        {
+            c.CompanyName = c.CompanyName?.Trim();
+            c.CompanyRegistrationNumber = c.CompanyRegistrationNumber?.Trim();
+            c.Sector = c.Sector?.Trim();
+            c.Address = c.Address?.Trim();
+            c.DressCode = c.DressCode?.Trim();
+            c.PersonInCharge = c.PersonInCharge?.Trim();
+            c.Email = c.Email?.Trim();
+            c.ContactNumber = c.ContactNumber?.Trim();
+            c.Website = c.Website?.Trim();
+            c.InternshipPeriod = c.InternshipPeriod?.Trim();
+            c.Information = c.Information?.Trim();
+            c.Quality = c.Quality?.Trim();
         }
     }
 }

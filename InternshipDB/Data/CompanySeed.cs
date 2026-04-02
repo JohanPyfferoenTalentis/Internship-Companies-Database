@@ -1,7 +1,7 @@
-using InternshipDB.Models;
 using ClosedXML.Excel;
 using InternshipDB.Models;
 using Microsoft.EntityFrameworkCore;
+
 namespace InternshipDB.Data
 {
     public static class CompanySeed

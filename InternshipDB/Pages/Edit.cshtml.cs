@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using InternshipDB.Data;
+using InternshipDB.Interfaces;
 using InternshipDB.Models;
 
 namespace InternshipDB.Pages
 {
     public class EditModel : PageModel
     {
-        private readonly InternshipDB.Data.AppDbContext _context;
+        private readonly ICompanyRepository _repository;
 
-        public EditModel(InternshipDB.Data.AppDbContext context)
+        public EditModel(ICompanyRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         [BindProperty]
@@ -26,66 +21,52 @@ namespace InternshipDB.Pages
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
-            var company =  await _context.Companies.FirstOrDefaultAsync(m => m.Id == id);
+            var company = await _repository.GetByIdAsync(id.Value);
             if (company == null)
-            {
                 return NotFound();
-            }
+
             Company = company;
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
-            {
                 return Page();
-            }
 
-            // Normalize trimmed fields to avoid accidental leading/trailing spaces
-            Company.CompanyName = Company.CompanyName?.Trim();
-            Company.CompanyRegistrationNumber = Company.CompanyRegistrationNumber?.Trim();
-            Company.Sector = Company.Sector?.Trim();
-            Company.PersonInCharge = Company.PersonInCharge?.Trim();
-            Company.Email = Company.Email?.Trim();
-            Company.ContactNumber = Company.ContactNumber?.Trim();
-            Company.Website = Company.Website?.Trim();
-            Company.InternshipPeriod = Company.InternshipPeriod?.Trim();
-            Company.Information = Company.Information?.Trim();
-            Company.Quality = Company.Quality?.Trim();
-            Company.Address = Company.Address?.Trim();
-            Company.DressCode = Company.DressCode?.Trim();
-
-            _context.Attach(Company).State = EntityState.Modified;
+            TrimCompanyFields(Company);
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _repository.UpdateAsync(Company);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CompanyExists(Company.Id))
-                {
+                var exists = await _repository.GetByIdAsync(Company.Id);
+                if (exists == null)
                     return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return RedirectToPage("./Index");
         }
 
-        private bool CompanyExists(int id)
+        private static void TrimCompanyFields(Company c)
         {
-            return _context.Companies.Any(e => e.Id == id);
+            c.CompanyName = c.CompanyName?.Trim();
+            c.CompanyRegistrationNumber = c.CompanyRegistrationNumber?.Trim();
+            c.Sector = c.Sector?.Trim();
+            c.PersonInCharge = c.PersonInCharge?.Trim();
+            c.Email = c.Email?.Trim();
+            c.ContactNumber = c.ContactNumber?.Trim();
+            c.Website = c.Website?.Trim();
+            c.InternshipPeriod = c.InternshipPeriod?.Trim();
+            c.Information = c.Information?.Trim();
+            c.Quality = c.Quality?.Trim();
+            c.Address = c.Address?.Trim();
+            c.DressCode = c.DressCode?.Trim();
         }
     }
 }

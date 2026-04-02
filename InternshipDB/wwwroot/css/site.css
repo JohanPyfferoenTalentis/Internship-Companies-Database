@@ -237,12 +237,12 @@ h1 {
 }
 
 .company-table thead th:nth-child(1) { width: 3%; }
-.company-table thead th:nth-child(2) { width: 32%; }
-.company-table thead th:nth-child(3) { width: 18%; }
-.company-table thead th:nth-child(4) { width: 10%; }
-.company-table thead th:nth-child(5) { width: 12%; }
-.company-table thead th:nth-child(6) { width: 15%; }
-.company-table thead th:nth-child(7) { width: 10%; }
+.company-table thead th:nth-child(2) { width: 22%; }
+.company-table thead th:nth-child(3) { width: 12%; }
+.company-table thead th:nth-child(4) { width: 14%; }
+.company-table thead th:nth-child(5) { width: 14%; }
+.company-table thead th:nth-child(6) { width: 20%; }
+.company-table thead th:nth-child(7) { width: 15%; }
 
 .company-table tbody tr {
   background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
@@ -565,4 +565,78 @@ h1 {
   .company-table thead th:nth-child(6) { width: 10%; }
   .company-table thead th:nth-child(7) { width: 15%; }
   .company-table thead th:nth-child(8) { width: 10%; }
+}
+
+/* --- PRINT- EN PDF-STYLING --- */
+@media print {
+  /* Verberg overbodige UI-elementen zoals knopjes, zoekbalken, navigatie en footers */
+  header, footer, nav, .btn, .search-panel, .form-actions, .toolbar-dropdown, .page-hero {
+    display: none !important;
+  }
+
+  /* Verwijder donkere achtergronden en forceer simpele witte/zwarte print */
+  body, html, main, .editor-card, .container-fluid {
+    background: #fff !important;
+    background-color: #fff !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Op detailpagina's inputvelden als gewone tekst tonen */
+  .form-control, .form-textarea, .readonly-field {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    resize: none !important;
+    color: #000 !important;
+    font-size: 11pt !important;
+    font-weight: normal !important;
+    white-space: pre-wrap !important;
+    height: auto !important;
+  }
+
+  /* Titels en labels duidelijk en strak voor documenten */
+  h1, h2, h3, .form-label {
+    color: #000 !important;
+  }
+
+  .form-group {
+    margin-bottom: 12px !important;
+    page-break-inside: avoid;
+    display: block !important;
+  }
+
+  /* Tabellen op de beginpagina mooi afdrukken */
+  table.table, .company-table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+    font-size: 10pt !important;
+    page-break-inside: auto !important;
+  }
+
+  table.table th, table.table td, .company-table th, .company-table td {
+    border: 1px solid #ccc !important;
+    padding: 6px !important;
+    color: #000 !important;
+    background: #fff !important;
+  }
+
+  /* Voorkom dat rijen op de helft worden doorgesneden bij een nieuwe pagina */
+  table.table tr, .company-table tr, .company-row {
+    page-break-inside: avoid !important;
+    page-break-after: auto !important;
+  }
+
+  /* Kleuren in pilletjes weghalen en normale tekst maken */
+  .sector-pill {
+    background: transparent !important;
+    color: #000 !important;
+    padding: 0 !important;
+    font-weight: normal !important;
+  }
 }

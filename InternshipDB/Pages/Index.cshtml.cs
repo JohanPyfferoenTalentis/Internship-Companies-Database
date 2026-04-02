@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using InternshipDB.Data;
 using InternshipDB.Helpers;
+using InternshipDB.Interfaces;
 using InternshipDB.Models;
 
 namespace InternshipDB.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly AppDbContext _context;
+        private readonly ICompanyRepository _repository;
 
-        public IndexModel(AppDbContext context)
+        public IndexModel(ICompanyRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         public IList<Company> Company { get; set; } = default!;
@@ -36,37 +31,9 @@ namespace InternshipDB.Pages
 
         public async Task OnGetAsync()
         {
-            var companies = _context.Companies.AsQueryable();
-
-            Sectors = await _context.Companies
-                .Where(c => !string.IsNullOrWhiteSpace(c.Sector))
-                .Select(c => c.Sector!)
-                .Distinct()
-                // Order case-insensitively for consistent alphabetical ordering
-                .OrderBy(s => s.ToLower())
-                .ToListAsync();
-
-            TotalCompanies = await _context.Companies.CountAsync();
-
-            if (!string.IsNullOrWhiteSpace(SearchString))
-            {
-                var search = SearchString.Trim().ToLower();
-                companies = companies.Where(c =>
-                    (c.CompanyName != null && c.CompanyName.ToLower().Contains(search)) ||
-                    (c.Sector != null && c.Sector.ToLower().Contains(search)) ||
-                    (c.PersonInCharge != null && c.PersonInCharge.ToLower().Contains(search)));
-            }
-
-            if (!string.IsNullOrWhiteSpace(SelectedSector))
-            {
-                companies = companies.Where(c => c.Sector == SelectedSector);
-            }
-
-            companies = SortOrder == "za"
-                ? companies.OrderByDescending(c => (c.CompanyName ?? string.Empty).ToLower())
-                : companies.OrderBy(c => (c.CompanyName ?? string.Empty).ToLower());
-
-            Company = await companies.ToListAsync();
+            Sectors = await _repository.GetDistinctSectorsAsync();
+            TotalCompanies = await _repository.CountAsync();
+            Company = await _repository.SearchAsync(SearchString, SelectedSector, SortOrder);
             FilteredCompanies = Company.Count;
         }
 

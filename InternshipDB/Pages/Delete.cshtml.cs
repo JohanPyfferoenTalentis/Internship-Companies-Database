@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using InternshipDB.Data;
+using InternshipDB.Interfaces;
 using InternshipDB.Models;
 
 namespace InternshipDB.Pages
 {
     public class DeleteModel : PageModel
     {
-        private readonly InternshipDB.Data.AppDbContext _context;
+        private readonly ICompanyRepository _repository;
 
-        public DeleteModel(InternshipDB.Data.AppDbContext context)
+        public DeleteModel(ICompanyRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         [BindProperty]
@@ -25,37 +20,22 @@ namespace InternshipDB.Pages
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
-            var company = await _context.Companies.FirstOrDefaultAsync(m => m.Id == id);
-
+            var company = await _repository.GetByIdAsync(id.Value);
             if (company == null)
-            {
                 return NotFound();
-            }
-            else
-            {
-                Company = company;
-            }
+
+            Company = company;
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
-            var company = await _context.Companies.FindAsync(id);
-            if (company != null)
-            {
-                Company = company;
-                _context.Companies.Remove(Company);
-                await _context.SaveChangesAsync();
-            }
+            await _repository.DeleteAsync(id.Value);
 
             return RedirectToPage("./Index");
         }
